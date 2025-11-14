@@ -16,6 +16,8 @@
 *.out
 go.work
 vendor/
+bin/
+tmp/
 
 # Node.js
 node_modules/
@@ -43,12 +45,15 @@ build/
 
 # Testing
 coverage/
+coverage.out
+coverage.html
 *.coverage
 .nyc_output
 
 # Logs
 logs/
 *.log
+build-errors.log
 
 # OS
 Thumbs.db
