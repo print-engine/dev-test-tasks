@@ -43,8 +43,7 @@ backend/
 │       ├── logger.go
 │       └── logger_test.go
 ├── config/                       # Configuration management
-│   ├── config.go
-│   └── .env.example
+│   └── config.go
 ├── api/                          # API specifications
 │   └── openapi.yaml              # OpenAPI 3.0 spec
 ├── migrations/                   # Database migrations
@@ -58,6 +57,7 @@ backend/
 │   ├── test.sh
 │   └── dev.sh
 ├── .air.toml                     # Hot reload configuration
+├── .env.example                  # Example environment variables
 ├── Makefile                      # Development commands
 ├── go.mod                        # Go module definition
 └── README.md                     # This file
@@ -105,7 +105,24 @@ go build -o bin/server cmd/server/main.go
 
 ## Configuration
 
-The server is configured via environment variables. See `config/.env.example` for all available options.
+The server is configured via environment variables. You can set them in a `.env` file or export them directly.
+
+### Using .env File
+
+1. Copy the example file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` with your values:
+   ```bash
+   PORT=5000
+   DB_PATH=data/app.db
+   ```
+
+3. The application will automatically load `.env` on startup
+
+**Note**: The `.env` file should be placed in the backend root directory (same location as this README).
 
 ### Server Configuration
 
