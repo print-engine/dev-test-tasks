@@ -2,7 +2,7 @@ package config
 
 import (
 	"os"
-	"strconv"
+	"path/filepath"
 	"time"
 )
 
@@ -22,12 +22,7 @@ type ServerConfig struct {
 
 // DatabaseConfig holds database-related configuration
 type DatabaseConfig struct {
-	Host     string
-	Port     int
-	User     string
-	Password string
-	DBName   string
-	SSLMode  string
+	Path string // Path to SQLite database file
 }
 
 // Load reads configuration from environment variables
@@ -40,14 +35,14 @@ func Load() *Config {
 			IdleTimeout:  getDurationEnv("IDLE_TIMEOUT", 60*time.Second),
 		},
 		DB: DatabaseConfig{
-			Host:     getEnv("DB_HOST", "localhost"),
-			Port:     getIntEnv("DB_PORT", 5432),
-			User:     getEnv("DB_USER", "postgres"),
-			Password: getEnv("DB_PASSWORD", ""),
-			DBName:   getEnv("DB_NAME", "testdb"),
-			SSLMode:  getEnv("DB_SSLMODE", "disable"),
+			Path: getEnv("DB_PATH", getDefaultDBPath()),
 		},
 	}
+}
+
+// getDefaultDBPath returns the default database path
+func getDefaultDBPath() string {
+	return filepath.Join("data", "app.db")
 }
 
 // getEnv reads an environment variable or returns a default value
@@ -57,19 +52,6 @@ func getEnv(key, defaultValue string) string {
 		return defaultValue
 	}
 	return value
-}
-
-// getIntEnv reads an integer environment variable or returns a default value
-func getIntEnv(key string, defaultValue int) int {
-	value := os.Getenv(key)
-	if value == "" {
-		return defaultValue
-	}
-	intValue, err := strconv.Atoi(value)
-	if err != nil {
-		return defaultValue
-	}
-	return intValue
 }
 
 // getDurationEnv reads a duration environment variable or returns a default value

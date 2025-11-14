@@ -9,7 +9,8 @@ A production-ready Go HTTP server template following Clean Architecture principl
 - **Health Check API**: `/healthcheck` endpoint with JSON response
 - **Logging Middleware**: Request tracking with method, path, duration, and status code
 - **Configuration Management**: Environment-based config with sensible defaults
-- **Database Migrations**: Structure and examples for schema management
+- **SQLite Database**: Embedded database with file-based storage in `data/` directory
+- **Database Migrations**: SQLite-compatible migration structure and examples
 - **Build Scripts**: Automated build, test, and development workflows
 - **API Documentation**: OpenAPI 3.0 specification
 - **Comprehensive Tests**: Unit tests for all components
@@ -50,6 +51,8 @@ backend/
 │   ├── README.md
 │   ├── 000001_create_users_table.up.sql
 │   └── 000001_create_users_table.down.sql
+├── data/                         # SQLite database storage
+│   └── .gitkeep                  # Keep directory in git
 ├── scripts/                      # Build and deployment scripts
 │   ├── build.sh
 │   ├── test.sh
@@ -113,16 +116,11 @@ The server is configured via environment variables. See `config/.env.example` fo
 | `WRITE_TIMEOUT` | `10s` | HTTP write timeout |
 | `IDLE_TIMEOUT` | `60s` | HTTP idle timeout |
 
-### Database Configuration
+### Database Configuration (SQLite)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `DB_HOST` | `localhost` | Database host |
-| `DB_PORT` | `5432` | Database port |
-| `DB_USER` | `postgres` | Database user |
-| `DB_PASSWORD` | `` | Database password |
-| `DB_NAME` | `testdb` | Database name |
-| `DB_SSLMODE` | `disable` | SSL mode |
+| `DB_PATH` | `data/app.db` | Path to SQLite database file |
 
 ## API Documentation
 
@@ -294,14 +292,17 @@ See `migrations/README.md` for detailed migration instructions.
 Quick start with golang-migrate:
 
 ```bash
+# Install (with SQLite support)
+go install -tags 'sqlite3' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
 # Create new migration
 migrate create -ext sql -dir migrations -seq add_posts_table
 
 # Run migrations
-migrate -path migrations -database "postgres://user:pass@localhost:5432/db?sslmode=disable" up
+migrate -path migrations -database "sqlite3://data/app.db" up
 
 # Rollback
-migrate -path migrations -database "postgres://user:pass@localhost:5432/db?sslmode=disable" down 1
+migrate -path migrations -database "sqlite3://data/app.db" down 1
 ```
 
 ## Architecture Guidelines
