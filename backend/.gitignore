@@ -1,0 +1,36 @@
+# Binaries and build output
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.out
+coverage.html
+
+# Go workspace file
+go.work
+
+# Air (hot reload) temporary files
+tmp/
+build-errors.log
+
+# IDE specific
+.idea/
+.vscode/
+*.swp
+
+# Environment files (keep .env.example)
+.env
+
+# Database files (SQLite)
+data/*.db
+data/*.db-shm
+data/*.db-wal
+!data/.gitkeep

@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Dev Test Tasks API
+  description: |
+    Backend API for the dev-test-tasks project.
+    This API provides health check and other endpoints for testing candidates' skills.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: http://localhost:8080
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+tags:
+  - name: Health
+    description: Health check endpoints
+
+paths:
+  /healthcheck:
+    get:
+      tags:
+        - Health
+      summary: Health check endpoint
+      description: Returns the current health status of the server
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckResponse'
+              examples:
+                healthy:
+                  summary: Healthy server response
+                  value:
+                    status: ok
+                    timestamp: '2025-11-14T12:00:00Z'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    HealthCheckResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          description: Health status of the server
+          example: ok
+          enum:
+            - ok
+            - degraded
+            - error
+        timestamp:
+          type: string
+          format: date-time
+          description: Current server time in UTC
+          example: '2025-11-14T12:00:00Z'
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: internal_server_error
+        message:
+          type: string
+          description: Human-readable error message
+          example: An unexpected error occurred
+        code:
+          type: integer
+          description: HTTP status code
+          example: 500
